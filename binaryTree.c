@@ -17,6 +17,7 @@ static void replaceNode( NODE * nodeToReplace, NODE * newNode );
 void deleteNode( NODE * tree, int value );
 static void delete( NODE * nodeToDelete );
 static NODE * min( NODE * subTree );
+NODE * findNode( NODE * tree, int value );
 
 void printInOrder( NODE * tree );
 
@@ -27,22 +28,24 @@ int main()
     insertNode( &arbol, 40 );
     insertNode( &arbol, 20 );
     insertNode( &arbol, 60 );
-    insertNode( &arbol, 10 );
+    //insertNode( &arbol, 10 );
     insertNode( &arbol, 30 );
     insertNode( &arbol, 50 );
     insertNode( &arbol, 70 );
 
-    printInOrder( arbol );
-
-    printf( "\n" );
-
-    deleteNode( arbol, 70 );
+    
 
     printInOrder( arbol );
 
     printf( "\n" );
 
     deleteNode( arbol, 40 );
+
+    printInOrder( arbol );
+
+    printf( "\n" );
+
+    deleteNode( arbol, 30 );
 
     printInOrder( arbol );
 
@@ -97,6 +100,20 @@ static void insertWithFather( NODE ** tree, NODE * parent, int value )
     }
 }
 
+NODE * findNode( NODE * tree, int value ) {
+
+	if( tree->value == value ) {
+		return tree;
+	} else {
+		if( value < tree->value ) {
+			findNode( tree->left, value );
+		} else if(value > tree->value) {
+			findNode( tree->right, value );
+		}
+	}
+
+}
+
 void insertNode( NODE ** tree, int value )
 {
     insertWithFather( tree, NULL, value );
@@ -106,11 +123,11 @@ static void replaceNode( NODE * nodeToReplace, NODE * newNode )
 {
     if ( nodeToReplace->parent )
     {
-        if ( nodeToReplace->value == nodeToReplace->parent->left->value )
+        if ( nodeToReplace->parent->left && nodeToReplace->value == nodeToReplace->parent->left->value )
         {
             nodeToReplace->parent->left = newNode;
         }
-        else if ( nodeToReplace->value == nodeToReplace->parent->right->value )
+        else if (  nodeToReplace->parent->right && nodeToReplace->value == nodeToReplace->parent->right->value )
         {
             nodeToReplace->parent->right = newNode;
         }
